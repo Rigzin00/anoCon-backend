@@ -134,8 +134,6 @@ callButton.onclick = async () => {
       }
     });
   });
-
-  hangupButton.disabled = false;
 };
 
 
@@ -168,7 +166,11 @@ answerButton.onclick = async () => {
 
   // Create answer
   const answerDescription = await pc.createAnswer();
-  await pc.setLocalDescription(answerDescription);
+  try {
+    await pc.setLocalDescription(answerDescription);
+  } catch (error) {
+      console.error("Error setting local description:", error);
+  }
 
   const answer = {
     type: answerDescription.type,
@@ -187,6 +189,5 @@ answerButton.onclick = async () => {
       }
     });
   });
-  hangupButton.disabled = false;
 };
 
