@@ -220,4 +220,5 @@ hangupButton.onclick = () => {
   callButton.disabled = true;
   answerButton.disabled = true;
   callInput.value = ''; // Clear call input
+  document.getElementById('nameInput').value = '';
 };
