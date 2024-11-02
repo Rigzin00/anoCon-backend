@@ -62,30 +62,37 @@
       flex-direction: column;">
 
           <div class="local_stream" 
-          style="display: flex;
+          style="
           justify-content:center ;
           text-align: center;
-          width: auto;
-          flex: 1;
+          width: auto;  
           ">
             <h3>Local Stream</h3>
           </div>
 
-          <div class="localv">
-            <video id="webcamVideo" autoplay playsinline></video>
+          <div class="localv"
+          style="
+          height: 240px;
+          width: 320px;">
+            <video style="
+          height: 240px;
+          width: 320px;" id="webcamVideo" autoplay playsinline></video>
           </div>
 
-          <div style="display: flex;
+          <div style="
           justify-content:center ;
           text-align: center;
           width: auto;
-          flex: 1;
           ">
             <h3>Remote Stream</h3>
           </div>
 
-          <div>
-            <video id="remoteVideo" autoplay playsinline></video>
+          <div style="
+          height: 240px;
+          width: 320px;">
+            <video style="
+            height: 240px;
+            width: 320px;" id="remoteVideo" autoplay playsinline></video>
           </div>
         
       </div>
