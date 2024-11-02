@@ -30,18 +30,18 @@ const servers = {
 };
 
 // Global State
-const pc = new RTCPeerConnection(servers);
+let pc = new RTCPeerConnection(servers);
 let localStream = null;
 let remoteStream = null;
 
 // HTML elements
-const webcamButton = document.getElementById('webcamButton');
-const webcamVideo = document.getElementById('webcamVideo');
-const callButton = document.getElementById('callButton');
-const callInput = document.getElementById('callInput');
-const answerButton = document.getElementById('answerButton');
-const remoteVideo = document.getElementById('remoteVideo');
-const hangupButton = document.getElementById('hangupButton');
+let webcamButton = document.getElementById('webcamButton');
+let webcamVideo = document.getElementById('webcamVideo');
+let callButton = document.getElementById('callButton');
+let callInput = document.getElementById('callInput');
+let answerButton = document.getElementById('answerButton');
+let remoteVideo = document.getElementById('remoteVideo');
+let hangupButton = document.getElementById('hangupButton');
 
 // 1. Setup media sources
 
@@ -134,6 +134,7 @@ callButton.onclick = async () => {
       }
     });
   });
+  hangupButton.disabled = false;
 };
 
 
@@ -189,5 +190,34 @@ answerButton.onclick = async () => {
       }
     });
   });
+  hangupButton.disabled = false;
 };
 
+// 4. Hang up the call
+hangupButton.onclick = () => {
+  // Close the peer connection
+  if (pc) {
+    pc.close();
+    pc = new RTCPeerConnection(servers); // Create a new connection for future calls
+  }
+
+  // Stop all local tracks
+  if (localStream) {
+    localStream.getTracks().forEach(track => track.stop());
+  }
+  
+  // Clear the remote stream
+  if (remoteStream) {
+    remoteStream.getTracks().forEach(track => track.stop());
+  }
+
+  // Reset video elements
+  webcamVideo.srcObject = null;
+  remoteVideo.srcObject = null;
+
+  // Enable webcam button and disable call-related buttons
+  webcamButton.disabled = false;
+  callButton.disabled = true;
+  answerButton.disabled = true;
+  callInput.value = ''; // Clear call input
+};
