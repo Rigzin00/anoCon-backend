@@ -69,9 +69,8 @@ webcamButton.onclick = async () => {
   webcamButton.disabled = true;
 };
 
-const shortenId = (id) => {
-  let shortId = '';
-  shortId = document.getElementById('nameInput').innerText;
+const shortenId = () => {
+  let shortId = document.getElementById('nameInput').value;
   return shortId;
 };
 
@@ -97,7 +96,7 @@ callButton.onclick = async () => {
   const offerCandidates = collection(callDoc, 'offerCandidates');
   const answerCandidates = collection(callDoc, 'answerCandidates');
 
-  const shortId = shortenId(callDoc.id);
+  const shortId = shortenId();
   callInput.value = shortId;
   await saveMapping(callDoc.id, shortId);
 
