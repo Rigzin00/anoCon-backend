@@ -1,20 +1,20 @@
 import './style.css';
-
+//import dotenv from 'dotenv';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, addDoc, updateDoc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
 
-require('dotenv').config();
+//dotenv.config();
 
 
 
 const firebaseConfig = {
-  apiKey: process.env.API_KEY,
-  authDomain: process.env.AUTH_DOMAIN,
-  projectId: process.env.PROJECT_ID,
-  storageBucket: process.env.STORAGE_BUCKET,
-  messagingSenderId: process.env.MESSAGING_SENDER_ID,
-  appId: process.env.APP_ID,
-  measurementId: process.env.MEASUREMENT_ID,
+  apiKey: "AIzaSyAbRzhqLE2X0Ri6DTjE_KjgaCAO9KujuBY",
+  authDomain: "webrtc-demo1-2b9c0.firebaseapp.com",
+  projectId: "webrtc-demo1-2b9c0",
+  storageBucket: "webrtc-demo1-2b9c0.firebasestorage.app",
+  messagingSenderId: "671271702684",
+  appId: "1:671271702684:web:93fae360e59dcba3649d59",
+  measurementId: "G-ZR0BKFN231",
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
@@ -46,7 +46,7 @@ const hangupButton = document.getElementById('hangupButton');
 // 1. Setup media sources
 
 webcamButton.onclick = async () => {
-  localStream = await navigator.mediaDevices.getUserMedia({ /*video: false,*/ audio: true });
+  localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
   remoteStream = new MediaStream();
 
   // Push tracks from local stream to peer connection
@@ -69,14 +69,44 @@ webcamButton.onclick = async () => {
   webcamButton.disabled = true;
 };
 
+const shortenId = (id) => {
+  const base62Chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let shortId = '';
+  let num = parseInt(id, 16);
+
+  while (num > 0) {
+    shortId = base62Chars[num % 62] + shortId;
+    num = Math.floor(num / 62);
+  }
+
+  return shortId;
+};
+
+const saveMapping = async (originalId, shortId) => {
+  await setDoc(doc(collection(firestore, 'idMappings'), shortId), { originalId });
+};
+
+const restoreId = async (shortId) => {
+  const docRef = doc(collection(firestore, 'idMappings'), shortId);
+  const docSnap = await getDoc(docRef);
+  
+  if (docSnap.exists()) {
+    return docSnap.data().originalId;
+  } else {
+    throw new Error('ID not found');
+  }
+};
+
 // 2. Create an offer
 callButton.onclick = async () => {
   // Reference Firestore collections for signaling
-  const callDoc = doc(collection(firestore, 'calls')); // Create a new document in 'calls' collection
+  const callDoc = doc(collection(firestore, 'calls'));
   const offerCandidates = collection(callDoc, 'offerCandidates');
   const answerCandidates = collection(callDoc, 'answerCandidates');
 
-  callInput.value = callDoc.id;
+  const shortId = shortenId(callDoc.id);
+  callInput.value = shortId;
+  await saveMapping(callDoc.id, shortId);
 
   // Get candidates for caller, save to db
   pc.onicecandidate = (event) => {
@@ -119,8 +149,9 @@ callButton.onclick = async () => {
 
 // 3. Answer the call with the unique ID
 answerButton.onclick = async () => {
-  const callId = callInput.value;
-  const callDoc = doc(collection(firestore, 'calls'), callId); // Reference to the specific call document
+  const shortId = callInput.value;
+  const callId = await restoreId(shortId);
+  const callDoc = doc(collection(firestore, 'calls'), callId);
   const answerCandidates = collection(callDoc, 'answerCandidates');
   const offerCandidates = collection(callDoc, 'offerCandidates');
 
