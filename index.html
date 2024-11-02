@@ -7,35 +7,94 @@
     <title>WebRTC Demo</title>
   </head>
   <body>
-    <h2>1. Start your Webcam</h2>
-    <div class="videos">
-      <span>
-        <h3>Local Stream</h3>
-        <video id="webcamVideo" autoplay playsinline></video>
-      </span>
-      <span>
-        <h3>Remote Stream</h3>
-        <video id="remoteVideo" autoplay playsinline></video>
-      </span>
+    <div
+    style="display: flex;
+    flex-direction: row;"
+    >
 
-
+      <!-- left div -->
+      <div class="left">
+        
+        <div class="video1">
+          <p class="p1">1. Start your Webcam</p>
+        </div>
+        
+        
+        <button id="webcamButton">
+          Start webcam
+        </button>
+        
+        <h2>
+        2. Create a new Call
+      </h2>
+      
+      <p><input id="nameInput"></p>
+      
+      <button id="callButton" disabled>
+        Create Call (offer)
+      </button>
+      
+      <h2>
+        3. Join a Call
+      </h2>
+      
+      <p>Answer the call from a different browser window or device</p>
+      
+      <input id="callInput">
+      <button id="answerButton" disabled>
+        Answer
+      </button>
+      
+      <h2>
+        4. Hangup
+      </h2>
+      
+      <button id="hangupButton" disabled>
+        Hangup
+      </button>
+      
     </div>
+    
+    
+  	<!--right div  -->
+      <div class="videos"
+      style="display: flex;
+      flex-direction: column;">
 
-    <button id="webcamButton">Start webcam</button>
-    <h2>2. Create a new Call</h2>
-    <button id="callButton" disabled>Create Call (offer)</button>
+          <div class="local_stream" 
+          style="display: flex;
+          justify-content:center ;
+          text-align: center;
+          width: auto;
+          flex: 1;
+          ">
+            <h3>Local Stream</h3>
+          </div>
 
-    <h2>3. Join a Call</h2>
-    <p>Answer the call from a different browser window or device</p>
-    <p><input id="nameInput">
-    <br>
-    <input id="callInput"></p>
-    <button id="answerButton" disabled>Answer</button>
+          <div class="localv">
+            <video id="webcamVideo" autoplay playsinline></video>
+          </div>
 
-    <h2>4. Hangup</h2>
+          <div style="display: flex;
+          justify-content:center ;
+          text-align: center;
+          width: auto;
+          flex: 1;
+          ">
+            <h3>Remote Stream</h3>
+          </div>
 
-    <button id="hangupButton" disabled>Hangup</button>
-
+          <div>
+            <video id="remoteVideo" autoplay playsinline></video>
+          </div>
+        
+      </div>
+    
+    
+    
+    
+    
+  </div>
     <script type="module" src="/main.js"></script>
 
   </body>
