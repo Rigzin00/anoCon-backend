@@ -70,15 +70,8 @@ webcamButton.onclick = async () => {
 };
 
 const shortenId = (id) => {
-  const base62Chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
   let shortId = '';
-  let num = parseInt(id, 16);
-
-  while (num > 0) {
-    shortId = base62Chars[num % 62] + shortId;
-    num = Math.floor(num / 62);
-  }
-
+  shortId = document.getElementById('nameInput').innerText;
   return shortId;
 };
 
