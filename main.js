@@ -1,8 +1,8 @@
 import './style.css';
-import dotenv from 'dotenv';
+//import dotenv from 'dotenv';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, addDoc, updateDoc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
-dotenv.config();
+//dotenv.config();
 
 
 // API keys set to visible since running FireStore in a Browser requires explicit mentioning so:
