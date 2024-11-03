@@ -30,3 +30,10 @@ This project is a simple WebRTC video call application that enables real-time au
     npm run dev
     ```
 
+3. **Connect!**
+    - Give WebCam and Microphone access.
+    - Start Webcam.
+    - Type in your Secret Code
+    - Create the call!
+    - Ask your call partner to input same secret key in the Join call section, after turning on their WebCam and Mic
+    - Enjoy Talking!
