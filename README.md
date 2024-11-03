@@ -37,3 +37,8 @@ This project is a simple WebRTC video call application that enables real-time au
     - Create the call!
     - Ask your call partner to input same secret key in the Join call section, after turning on their WebCam and Mic
     - Enjoy Talking!
+
+## Developers:
+- [M S Aswin](https://github.com/glitch-aswin/)
+- [Pranav M](https://github.com/trulyPranav/)
+- [Rigzin Angtak](https://github.com/Rigzin00/)
