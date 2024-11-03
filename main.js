@@ -1,12 +1,11 @@
 import './style.css';
-//import dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, addDoc, updateDoc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
-
-//dotenv.config();
-
+dotenv.config();
 
 
+// API keys set to visible since running FireStore in a Browser requires explicit mentioning so:
 const firebaseConfig = {
   apiKey: "AIzaSyAbRzhqLE2X0Ri6DTjE_KjgaCAO9KujuBY",
   authDomain: "webrtc-demo1-2b9c0.firebaseapp.com",
@@ -34,7 +33,6 @@ let pc = new RTCPeerConnection(servers);
 let localStream = null;
 let remoteStream = null;
 
-// HTML elements
 let webcamButton = document.getElementById('webcamButton');
 let webcamVideo = document.getElementById('webcamVideo');
 let callButton = document.getElementById('callButton');
@@ -44,17 +42,14 @@ let remoteVideo = document.getElementById('remoteVideo');
 let hangupButton = document.getElementById('hangupButton');
 
 // 1. Setup media sources
-
 webcamButton.onclick = async () => {
   localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
   remoteStream = new MediaStream();
 
-  // Push tracks from local stream to peer connection
   localStream.getTracks().forEach((track) => {
     pc.addTrack(track, localStream);
   });
 
-  // Pull tracks from remote stream, add to video stream
   pc.ontrack = (event) => {
     event.streams[0].getTracks().forEach((track) => {
       remoteStream.addTrack(track);
@@ -91,7 +86,6 @@ const restoreId = async (shortId) => {
 
 // 2. Create an offer
 callButton.onclick = async () => {
-  // Reference Firestore collections for signaling
   const callDoc = doc(collection(firestore, 'calls'));
   const offerCandidates = collection(callDoc, 'offerCandidates');
   const answerCandidates = collection(callDoc, 'answerCandidates');
@@ -100,12 +94,10 @@ callButton.onclick = async () => {
   callInput.value = shortId;
   await saveMapping(callDoc.id, shortId);
 
-  // Get candidates for caller, save to db
   pc.onicecandidate = (event) => {
     event.candidate && addDoc(offerCandidates, event.candidate.toJSON());
   };
 
-  // Create offer
   const offerDescription = await pc.createOffer();
   await pc.setLocalDescription(offerDescription);
 
@@ -116,7 +108,6 @@ callButton.onclick = async () => {
 
   await setDoc(callDoc, { offer });
 
-  // Listen for remote answer
   onSnapshot(callDoc, (snapshot) => {
     const data = snapshot.data();
     if (!pc.currentRemoteDescription && data?.answer) {
@@ -125,7 +116,6 @@ callButton.onclick = async () => {
     }
   });
 
-  // When answered, add candidate to peer connection
   onSnapshot(answerCandidates, (snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === 'added') {
@@ -135,10 +125,9 @@ callButton.onclick = async () => {
     });
   });
   hangupButton.disabled = false;
+  answerButton.disabled = true;
 };
 
-
-// 3. Answer the call with the unique ID
 answerButton.onclick = async () => {
   const shortId = callInput.value;
   const callId = await restoreId(shortId);
@@ -146,26 +135,21 @@ answerButton.onclick = async () => {
   const answerCandidates = collection(callDoc, 'answerCandidates');
   const offerCandidates = collection(callDoc, 'offerCandidates');
 
-  // Set up ICE candidate gathering
   pc.onicecandidate = (event) => {
     event.candidate && addDoc(answerCandidates, event.candidate.toJSON());
   };
 
-  // Get the call data
   const callSnapshot = await getDoc(callDoc);
   const callData = callSnapshot.data();
 
-  // Check if callData exists and has the offer
   if (!callData || !callData.offer) {
     console.error("No call data found or offer is missing in the document.");
-    return; // Exit if there's no valid call data
+    return;
   }
 
-  // Set remote description
   const offerDescription = callData.offer;
   await pc.setRemoteDescription(new RTCSessionDescription(offerDescription));
 
-  // Create answer
   const answerDescription = await pc.createAnswer();
   try {
     await pc.setLocalDescription(answerDescription);
@@ -178,10 +162,8 @@ answerButton.onclick = async () => {
     sdp: answerDescription.sdp,
   };
 
-  // Update call document with answer
   await updateDoc(callDoc, { answer });
 
-  // Listen for offer candidates
   onSnapshot(offerCandidates, (snapshot) => {
     snapshot.docChanges().forEach((change) => {
       if (change.type === 'added') {
@@ -191,34 +173,30 @@ answerButton.onclick = async () => {
     });
   });
   hangupButton.disabled = false;
+  callButton.disabled = true;
 };
 
 // 4. Hang up the call
 hangupButton.onclick = () => {
-  // Close the peer connection
   if (pc) {
     pc.close();
-    pc = new RTCPeerConnection(servers); // Create a new connection for future calls
+    pc = new RTCPeerConnection(servers);
   }
 
-  // Stop all local tracks
   if (localStream) {
     localStream.getTracks().forEach(track => track.stop());
   }
-  
-  // Clear the remote stream
+
   if (remoteStream) {
     remoteStream.getTracks().forEach(track => track.stop());
   }
 
-  // Reset video elements
   webcamVideo.srcObject = null;
   remoteVideo.srcObject = null;
 
-  // Enable webcam button and disable call-related buttons
   webcamButton.disabled = false;
   callButton.disabled = true;
   answerButton.disabled = true;
-  callInput.value = ''; // Clear call input
+  callInput.value = '';
   document.getElementById('nameInput').value = '';
 };
