@@ -23,8 +23,19 @@ This project is a simple WebRTC video call application that enables real-time au
    git clone https://github.com/Glitch-Aswin/anoCon-backend.git
    cd anoCon-backend
    ```
+2. **Firebase Configuration**:
+   -Create a .env file in the root of your project and add your Firebase credentials:
+   ```
+   VITE_FIREBASE_API_KEY=your-api-key
+   VITE_FIREBASE_AUTH_DOMAIN=your-auth-domain
+   VITE_FIREBASE_PROJECT_ID=your-project-id
+   VITE_FIREBASE_STORAGE_BUCKET=your-storage-bucket
+   VITE_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+   VITE_FIREBASE_APP_ID=your-app-id
+   VITE_FIREBASE_MEASUREMENT_ID=your-measurement-id
+   ```
 
-2. **Install and Run**
+3. **Install and Run**
     ```js
     npm install i
     npm run dev
