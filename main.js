@@ -1,19 +1,18 @@
 import './style.css';
-//import dotenv from 'dotenv';
+
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, doc, addDoc, updateDoc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
-//dotenv.config();
 
 
 // API keys set to visible since running FireStore in a Browser requires explicit mentioning so:
 const firebaseConfig = {
-  apiKey: "AIzaSyAbRzhqLE2X0Ri6DTjE_KjgaCAO9KujuBY",
-  authDomain: "webrtc-demo1-2b9c0.firebaseapp.com",
-  projectId: "webrtc-demo1-2b9c0",
-  storageBucket: "webrtc-demo1-2b9c0.firebasestorage.app",
-  messagingSenderId: "671271702684",
-  appId: "1:671271702684:web:93fae360e59dcba3649d59",
-  measurementId: "G-ZR0BKFN231",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const firebaseApp = initializeApp(firebaseConfig);
