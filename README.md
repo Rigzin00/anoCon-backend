@@ -4,6 +4,15 @@
 
 This project is a simple WebRTC video call application that enables real-time audio and video communication between users. It uses Firebase Firestore for signaling and ID mapping, allowing users to connect by sharing unique identifiers.
 
+## Hosting
+
+A working model has been hosted on https://anoconsession.vercel.app/ 
+**Steps to start a video call session:**
+- **Step-1**: Click the start webcam button and allow the video and audio access permission.
+- **Step-2(Call offer)**: One of the peers can initiate a call by entering a code in the "Create New Call" text space and clicking the Create Call Button.
+- **Step-3(Answer the call)**: Using the same code a receiver can access the call by entering the same ID to the Answer Call text space and clicking the Answer Call Button afterwards.
+- **Step-4(Hang-Up)**: Click on the Hang Up button when necessary to end the call.
+
 ## Features
 
 - **WebRTC Video and Audio**: Real-time video and audio communication using WebRTC.
