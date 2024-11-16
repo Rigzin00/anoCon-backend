@@ -7,6 +7,7 @@ This project is a simple WebRTC video call application that enables real-time au
 ## Hosting
 
 A working model has been hosted on https://anoconsession.vercel.app/ 
+
 **Steps to start a video call session:**
 - **Step-1**: Click the start webcam button and allow the video and audio access permission.
 - **Step-2(Call offer)**: One of the peers can initiate a call by entering a code in the "Create New Call" text space and clicking the Create Call Button.
