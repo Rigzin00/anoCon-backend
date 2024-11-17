@@ -1,6 +1,6 @@
-<img src="/public/anoCon.png" align="center">
+<h1 align="center">anoCon : A WebRTC Video Call Application</h1>
 
-# anoCon : A WebRTC Video Call Application
+<img src="/public/anoCon.png" align="center">
 
 ## Overview
 
